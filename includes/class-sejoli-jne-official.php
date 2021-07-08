@@ -103,26 +103,78 @@ class Sejoli_Jne_Official {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-sejoli-jne-official-loader.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'includes/class-sejoli-jne-official-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-sejoli-jne-official-i18n.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'includes/class-sejoli-jne-official-i18n.php';
+
+		/**
+		 * The class responsible for integrating with database
+		 * @var [type]
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . '/includes/class-sejoli-jne-official-database.php';
+
+		/**
+		 * The class responsible for creating database tables.
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/main.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/indonesia/state.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/indonesia/city.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/indonesia/district.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/jne/origin.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/jne/destination.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/jne/tariff.php';
+
+		/**
+		 * The class responsible for database seed.
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'database/indonesia/seed.php';
+
+		/**
+		 * The class responsible for database models.
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/main.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/state.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/city.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/district.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/jne/origin.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/jne/destination.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/jne/tariff.php';
+
+		/**
+		 * The class responsible for defining all related WooCommerce functions.
+		 */
+		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'includes/class-sejoli-jne-official-method.php';
+
+		/**
+		 * The class responsible for defining API related functions.
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'includes/class-sejoli-jne-official-api.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'api/class-sejoli-jne-official-jne.php';
+
+		/**
+		 * The class responsible for defining CLI command and function
+		 * side of the site.
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'cli/jne.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-sejoli-jne-official-admin.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/class-sejoli-jne-official-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-sejoli-jne-official-public.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'public/class-sejoli-jne-official-public.php';
 
 		$this->loader = new Sejoli_Jne_Official_Loader();
+
+		Sejoli_Jne_Official\DBIntegration::connection();
 
 	}
 
@@ -152,10 +204,10 @@ class Sejoli_Jne_Official {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Sejoli_Jne_Official_Admin( $this->get_plugin_name(), $this->get_version() );
+		$admin = new Sejoli_Jne_Official\Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
 
 	}
 
@@ -168,10 +220,10 @@ class Sejoli_Jne_Official {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Sejoli_Jne_Official_Public( $this->get_plugin_name(), $this->get_version() );
+		$public = new Sejoli_Jne_Official\Front( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
 
 	}
 
@@ -213,6 +265,18 @@ class Sejoli_Jne_Official {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Register shipping method to WooCommerce.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $methods Registered shipping methods.
+	 */
+	public function register_sejoli_jne_method( $methods ) {
+	    $methods[ 'sejoli-jne-shipping' ] = new \Sejoli_Jne_Official\Shipping_Method();
+	    return $methods;
 	}
 
 }
