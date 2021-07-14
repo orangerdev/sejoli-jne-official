@@ -148,7 +148,6 @@ class Sejoli_Jne_Official {
 		 * The class responsible for defining all related WooCommerce functions.
 		 */
 		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'includes/class-sejoli-jne-official-method.php';
-		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/payment.php';
 
 		/**
 		 * The class responsible for defining API related functions.
@@ -209,20 +208,6 @@ class Sejoli_Jne_Official {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
-
-		$payment = new Sejoli_Jne_Official\Admin\Payment( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'plugins_loaded',								$payment, 'load_libraries', 10);
-		$this->loader->add_filter( 'sejoli/general/fields',							$payment, 'setup_payment_setting_fields', 40);
-		$this->loader->add_filter( 'sejoli/order/grand-total',						$payment, 'set_price',		900, 2);
-		$this->loader->add_filter( 'sejoli/order/meta-data',						$payment, 'set_meta_data',	100, 2);
-		$this->loader->add_filter( 'sejoli/payment/module',							$payment, 'get_payment_module', 1);
-		$this->loader->add_filter( 'sejoli/notification/content/order-meta',		$payment, 'display_payment_instruction', 100, 4);
-		$this->loader->add_filter( 'sejoli/notification/content/payment-gateway',	$payment, 'display_simple_payment_instruction', 100, 4);
-		$this->loader->add_filter( 'sejoli/payment/available-payment-gateways',		$payment, 'get_available_payment_gateways', 10);
-		$this->loader->add_filter( 'sejoli/order/cart-detail',						$payment, 'set_cart_detail', 10, 2);
-		$this->loader->add_filter( 'sejoli/order/order-detail',						$payment, 'set_payment_data_to_order_detail', 10);
-		$this->loader->add_filter( 'sejoli/payment/fee',							$payment, 'get_payment_fee', 1, 2);
 
 	}
 
