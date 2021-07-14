@@ -31,6 +31,16 @@ class Sejoli_Jne_Official_Activator {
 	 */
 	public static function activate() {
 
+		Sejoli_Jne_Official\Database\State::create_table();
+		Sejoli_Jne_Official\Database\City::create_table();
+		Sejoli_Jne_Official\Database\District::create_table();
+		
+		Sejoli_Jne_Official\Database\JNE\Origin::create_table();
+		Sejoli_Jne_Official\Database\JNE\Destination::create_table();
+		Sejoli_Jne_Official\Database\JNE\Tariff::create_table();
+
+		$seed = new Sejoli_Jne_Official\Database\Seed();
+		
 	}
 
 }
