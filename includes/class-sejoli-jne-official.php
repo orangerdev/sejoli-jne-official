@@ -143,12 +143,6 @@ class Sejoli_Jne_Official {
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/jne/origin.php';
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/jne/destination.php';
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/jne/tariff.php';
-		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'model/shipment.php';
-
-		/**
-		 * The class responsible for defining all related WooCommerce functions.
-		 */
-		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'includes/class-sejoli-jne-official-method.php';
 
 		/**
 		 * The class responsible for defining API related functions.
@@ -161,12 +155,6 @@ class Sejoli_Jne_Official {
 		 * side of the site.
 		 */
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'cli/jne.php';
-
-		/**
-		 * The files responsible for defining all functions that will work as helper
-		 */
-		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'functions/shipment.php';
-		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'functions/options.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -219,9 +207,9 @@ class Sejoli_Jne_Official {
 
 		$shipment = new Sejoli_Jne_Official\Admin\ShipmentJNE( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'plugins_loaded',								$shipment, 'register_libraries',		10);
-		$this->loader->add_filter( 'sejoli/admin/js-localize-data',		 			$shipment, 'set_localize_js_var',	   	10);
-		$this->loader->add_action( 'carbon_fields_theme_options_container_saved',	$shipment, 'delete_cache_data',			10);
+		$this->loader->add_action( 'plugins_loaded',							  $shipment, 'register_libraries',  10);
+		$this->loader->add_filter( 'sejoli/admin/js-localize-data',		 	      $shipment, 'set_localize_js_var',	10);
+		$this->loader->add_action( 'carbon_fields_theme_options_container_saved', $shipment, 'delete_cache_data',	10);
 
 	}
 
