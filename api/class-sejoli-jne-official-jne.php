@@ -29,6 +29,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @since   1.0.0
      */
 	public static function set_sandbox_data() {
+
 		$username 	= 'TESTAPI';
 		$api_key 	= '25c898a9faea1a100859ecd9ef674548';
 
@@ -36,6 +37,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 			'username' => $username,
 			'api_key'  => $api_key
 		);
+
 	}
 
 	/**
@@ -56,6 +58,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @return 	(static) return an instance of static class
      */
 	public static function set_params( $is_sandbox = true ) {
+		
 		self::$headers = [
 			'Content-Type' => 'application/x-www-form-urlencoded',
 			'Accept' 	   => 'application/json'
@@ -68,6 +71,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		endif;
 
 		return new static;
+	
 	}
 
 	/**
@@ -78,6 +82,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @return 	(array|boolean) The response array or false on failure
      */
 	public static function get_valid_body_object( $response ) {
+	
 		$response_body = $response['body'];
 
 		if( isset( $response_body->status ) && $response_body->status == 'false' ) {
@@ -85,6 +90,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		}
 	 	
 	 	return json_decode( $response_body );
+	
 	}
 
 	/**
@@ -95,6 +101,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @return 	(array|WP_Error) The response array or a WP_Error on failure
      */
 	public static function get_origin() {
+	
 		try {
 			self::$endpoint = 'http://apiv2.jne.co.id:10102/insert/getorigin';
 			self::$method 	= 'POST';
@@ -122,6 +129,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		} catch ( Exception $e ) {
 			return new \WP_Error( 'invalid_api_response', wp_sprintf( __( '<strong>Error from JNE API</strong>: %s', 'scod-shipping' ), $e->getMessage() ) );
 		}
+	
 	}
 
 	/**
@@ -132,6 +140,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @return 	(array|WP_Error) The response array or a WP_Error on failure
      */
 	public function get_destination() {
+	
 		try {
 			self::$endpoint = 'http://apiv2.jne.co.id:10102/insert/getdestination';
 			self::$method 	= 'POST';
@@ -159,6 +168,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		} catch ( Exception $e ) {
 			return new \WP_Error( 'invalid_api_response', wp_sprintf( __( '<strong>Error from JNE API</strong>: %s', 'scod-shipping' ), $e->getMessage() ) );
 		}
+	
 	}
 
 	/**
@@ -172,7 +182,8 @@ class JNE extends \Sejoli_Jne_Official\API {
      *
      * @return 	(array|WP_Error) The response array or a WP_Error on failure
      */
-	public function get_tariff( string $origin, string $destination, int $weight = 1 ) {
+	public function get_tariff( string $origin, string $destination, int $weight ) {
+	
 		try {
 			self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/pricedev';
 			self::$method 	= 'POST';
@@ -212,6 +223,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		} catch ( Exception $e ) {
 			return new \WP_Error( 'invalid_api_response', wp_sprintf( __( '<strong>Error from JNE API</strong>: %s', 'scod-shipping' ), $e->getMessage() ) );
 		}
+	
 	}
 
 	/**
@@ -226,6 +238,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @return 	(array|WP_Error) The response array or a WP_Error on failure
      */
 	public function get_airwaybill( int $order_id, string $shipper_name, string $shipper_addr1, string $shipper_addr2, string $shipper_city, string $shipper_region, int $shipper_zip, string $shipper_phone, string $receiver_name, string $receiver_addr1, string $receiver_addr2, string $receiver_city, string $receiver_region, int $receiver_zip, string $receiver_phone, int $qty, int $weight, string $goodsdesc, int $goodsvalue, int $goodstype, string $insurance, string $origin, string $destination, string $service, string $codflag, int $codamount ) {
+	
 		try {
 			self::$endpoint 	= 'http://apiv2.jne.co.id:10102/tracing/api/generatecnote';
 			self::$method 		= 'POST';
@@ -293,6 +306,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		} catch ( Exception $e ) {
 			return new \WP_Error( 'invalid_api_response', wp_sprintf( __( '<strong>Error from JNE API</strong>: %s', 'scod-shipping' ), $e->getMessage() ) );
 		}
+	
 	}
 
 	/**
@@ -303,6 +317,7 @@ class JNE extends \Sejoli_Jne_Official\API {
      * @return 	(array|WP_Error) The response array or a WP_Error on failure
      */
 	public function get_tracking(string $tracking_number) {
+	
 		try {
 			// self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/'.$tracking_number;
 			self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/4808012000000159';
@@ -333,6 +348,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 		} catch ( Exception $e ) {
 			return new \WP_Error( 'invalid_api_response', wp_sprintf( __( '<strong>Error from JNE API</strong>: %s', 'scod-shipping' ), $e->getMessage() ) );
 		}
+	
 	}
 
 }

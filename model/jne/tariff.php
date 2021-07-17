@@ -125,13 +125,13 @@ class Tariff extends Eloquent
      */
     public function getRateID( $prefix, $rate ) {
 
-        $ids = array( $prefix , $this->label );
-        $code = $rate->service_code;
+        $ids       = array( $prefix , $this->label );
+        $code      = $rate->service_code;
         $separator = "_";
 
-        $lessthan_pattern = "/</i";
-        $lessthan_placeholder = "lt";
-        $biggerthan_pattern = "/>/i";
+        $lessthan_pattern       = "/</i";
+        $lessthan_placeholder   = "lt";
+        $biggerthan_pattern     = "/>/i";
         $biggerthan_placeholder = "bt";
 
         if( preg_match( $biggerthan_pattern, $code ) ) {
@@ -142,6 +142,7 @@ class Tariff extends Eloquent
 
         $ids[] = $code;
         return mb_strtolower( \implode( $separator, $ids ) );
+
     }
 
 }
