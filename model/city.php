@@ -35,7 +35,9 @@ class City extends Eloquent
      * @return  string
      */
 	public function state() {
+
 		return $this->belongsTo( 'Sejoli_Jne_Official\Model\State', 'state_id' );
+
 	}
 
     /**
@@ -45,7 +47,9 @@ class City extends Eloquent
      * @return  string
      */
     public function districts() {
+
         return $this->hasMany( 'Sejoli_Jne_Official\Model\District', 'city_id' );
+        
     }
 
 }

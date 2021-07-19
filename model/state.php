@@ -35,7 +35,9 @@ class State extends Eloquent
      * @return  string
      */
 	public function cities() {
+
 		return $this->hasMany( 'Sejoli_Jne_Official\Model\City', 'state_id' );
+        
 	}
     
 }

@@ -1,5 +1,4 @@
 <?php
-
 use Sejoli_Jne_Official\API\JNE as API_JNE;
 
 // Add custom commands
@@ -24,9 +23,9 @@ function get_tariff( $args = array(), $assoc_args = array() ) {
     $arguments = wp_parse_args(
         $assoc_args,
         array(
-            'origin'           => '',
-            'destination'      => '',
-            'weight'           => 1
+            'origin'      => '',
+            'destination' => '',
+            'weight'      => 1
         )
     );
 

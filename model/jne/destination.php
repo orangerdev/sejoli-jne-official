@@ -35,7 +35,9 @@ class Destination extends Eloquent
      * @return  string
      */
     public function city() {
+
         return $this->belongsTo( 'Sejoli_Jne_Official\Model\City', 'city_id' );
+
     }
 
     /**
@@ -45,7 +47,9 @@ class Destination extends Eloquent
      * @return  string
      */
     public function district() {
+
         return $this->belongsTo( 'Sejoli_Jne_Official\Model\District', 'district_id' );
+
     }
 
     /**
@@ -55,7 +59,9 @@ class Destination extends Eloquent
      * @return  string
      */
     public function getTableName() {
+
         return $this->table;
+        
     }
 
 }

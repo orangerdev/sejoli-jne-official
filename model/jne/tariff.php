@@ -29,7 +29,9 @@ class Tariff extends Eloquent
 	];
 
     public static function get_available_services() {
+
         return self::$available_services;
+
     }
 
     /**
@@ -39,7 +41,9 @@ class Tariff extends Eloquent
      * @return void
      */
     public function setTariffDataAttribute( $value ) {
+
         $this->attributes['tariff_data'] = serialize( $value );
+
     }
 
     /**
@@ -49,7 +53,9 @@ class Tariff extends Eloquent
      * @return string
      */
     public function getTariffDataAttribute( $value ) {
+
         return unserialize( $value );
+
     }
 
     /**
@@ -59,7 +65,9 @@ class Tariff extends Eloquent
      * @return  string
      */
     public function origin() {
+
         return $this->belongsTo( 'Sejoli_Jne_Official\Model\JNE\Origin', 'jne_origin_id' );
+
     }
 
     /**
@@ -69,7 +77,9 @@ class Tariff extends Eloquent
      * @return  string
      */
     public function destination() {
+        
         return $this->belongsTo( 'Sejoli_Jne_Official\Model\JNE\Destination', 'jne_destination_id' );
+    
     }
 
     /**
@@ -114,6 +124,7 @@ class Tariff extends Eloquent
         }
 
         return $label;
+    
     }
 
     /**

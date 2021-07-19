@@ -31,6 +31,7 @@ abstract class Main extends \WeDevs\ORM\Eloquent\Model
         }
 
         return parent::getTable();
+        
     }
 
 }

@@ -22,10 +22,10 @@ Class Model
     static protected $status       = NULL;
     static protected $meta_data    = [];
     static protected $filter       = [
-        'start'     => NULL,
-        'length'    => NULL,
-        'order'     => NULL,
-        'search'    => NULL,
+        'start'  => NULL,
+        'length' => NULL,
+        'order'  => NULL,
+        'search' => NULL,
     ];
 
     static protected $chart = [
@@ -71,10 +71,10 @@ Class Model
         self::$respond      = [];
         self::$messages     = [];
         self::$filter       = [
-            'start'     => NULL,
-            'length'    => NULL,
-            'order'     => NULL,
-            'search'    => NULL
+            'start'  => NULL,
+            'length' => NULL,
+            'order'  => NULL,
+            'search' => NULL
         ];
 
         self::$chart = [
@@ -84,7 +84,7 @@ Class Model
         ];
 
 
-        self::$action       = '';
+        self::$action = '';
 
         return new static;
     }
@@ -118,7 +118,7 @@ Class Model
             self::$user    = $user;
         else :
             self::set_user_id($user);
-            self::$user  = get_user_by('id', $user);
+            self::$user = get_user_by('id', $user);
         endif;
 
         return new static;

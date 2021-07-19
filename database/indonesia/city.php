@@ -27,9 +27,9 @@ Class City extends \Sejoli_Jne_Official\Database
 
             Capsule::schema()->create( self::table(), function( $table ){
 
-                $table->increments  ('ID');
-                $table->string      ('name');
-                $table->integer     ('state_id');
+                $table->increments ('ID');
+                $table->string     ('name');
+                $table->integer    ('state_id');
 
             });
 

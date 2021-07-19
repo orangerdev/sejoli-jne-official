@@ -35,7 +35,9 @@ class District extends Eloquent
      * @return  string
      */
     public function city() {
+
         return $this->belongsTo( 'Sejoli_Jne_Official\Model\City', 'city_id' );
+        
     }
 
 

@@ -78,11 +78,12 @@ class API {
 	public static function do_request() {
 
 		return wp_remote_request( static::$endpoint, [
-			'headers' 	=> static::$headers,
-			'method' 	=> static::$method,
-			'timeout' 	=> static::$timeout,				    
-			'body' 		=> static::$body
-		]);	
+			'headers' => static::$headers,
+			'method'  => static::$method,
+			'timeout' => static::$timeout,				    
+			'body' 	  => static::$body
+		]);
+
 	}
 
 	/**
@@ -108,6 +109,7 @@ class API {
 		}
 
 		return false;
+		
 	}
 
 }

@@ -27,12 +27,12 @@ Class Destination extends \Sejoli_Jne_Official\Database
 
             Capsule::schema()->create( self::table(), function( $table ){
 
-                $table->increments  ('ID');
-                $table->integer     ('city_id')->nullable();
-                $table->integer     ('district_id')->nullable();
-                $table->string      ('city_name');
-                $table->string      ('district_name');
-                $table->string      ('code');
+                $table->increments ('ID');
+                $table->integer    ('city_id')->nullable();
+                $table->integer    ('district_id')->nullable();
+                $table->string     ('city_name');
+                $table->string     ('district_name');
+                $table->string     ('code');
 
             });
 

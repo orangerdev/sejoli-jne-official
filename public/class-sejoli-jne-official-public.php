@@ -1,16 +1,6 @@
 <?php
 namespace Sejoli_Jne_Official;
 
-use \WeDevs\ORM\Eloquent\Facades\DB;
-use Sejoli_Jne_Official\Model\State as State;
-use Sejoli_Jne_Official\Model\City as City;
-use Sejoli_Jne_Official\Model\District as District;
-use Sejoli_Jne_Official\API\SCOD as API_SCOD;
-use Sejoli_Jne_Official\API\JNE as API_JNE;
-use Sejoli_Jne_Official\Model\JNE\Origin as JNE_Origin;
-use Sejoli_Jne_Official\Model\JNE\Destination as JNE_Destination;
-use Sejoli_Jne_Official\Shipping_Method;
-
 /**
  * The public-facing functionality of the plugin.
  *

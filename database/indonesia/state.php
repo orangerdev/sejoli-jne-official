@@ -42,9 +42,9 @@ Class State extends \Sejoli_Jne_Official\Database
 
             Capsule::schema()->create( self::table(), function( $table ){
 
-                $table->increments  ('ID');
-                $table->string      ('name');
-                $table->string     	('code');
+                $table->increments ('ID');
+                $table->string     ('name');
+                $table->string     ('code');
 
             });
 

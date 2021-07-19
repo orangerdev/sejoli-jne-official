@@ -12,6 +12,7 @@ Class DBIntegration
    */
   public static function connection()
   {
+
       global $wpdb;
 
       if(!class_exists('Capsule')):
@@ -20,15 +21,15 @@ Class DBIntegration
           $host_data = explode(':', DB_HOST);
 
           $args = [
-              'driver'    => 'mysql',
-              'host'      => $host_data,
-              'database'  => DB_NAME,
-              'username'  => DB_USER,
-              'password'  => DB_PASSWORD,
+              'driver'   => 'mysql',
+              'host'     => $host_data,
+              'database' => DB_NAME,
+              'username' => DB_USER,
+              'password' => DB_PASSWORD,
               // 'charset'   => $wpdb->charset, // will cause problem in several server
               // 'collation' => $wpdb->collate,
-              'prefix'    => '',
-              'strict'    => false
+              'prefix'   => '',
+              'strict'   => false
           ];
 
           if(isset($host_data[1])) :
@@ -41,5 +42,7 @@ Class DBIntegration
           $capsule->bootEloquent();
 
       endif;
+
   }
+  
 }

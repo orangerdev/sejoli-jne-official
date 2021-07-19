@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -67,6 +66,7 @@ class Sejoli_Jne_Official {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
+
 		if ( defined( 'SEJOLI_JNE_OFFICIAL_VERSION' ) ) {
 			$this->version = SEJOLI_JNE_OFFICIAL_VERSION;
 		} else {
@@ -186,7 +186,6 @@ class Sejoli_Jne_Official {
 	private function set_locale() {
 
 		$plugin_i18n = new Sejoli_Jne_Official_i18n();
-
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
@@ -235,7 +234,9 @@ class Sejoli_Jne_Official {
 	 * @since    1.0.0
 	 */
 	public function run() {
+
 		$this->loader->run();
+
 	}
 
 	/**
@@ -246,7 +247,9 @@ class Sejoli_Jne_Official {
 	 * @return    string    The name of the plugin.
 	 */
 	public function get_plugin_name() {
+
 		return $this->plugin_name;
+
 	}
 
 	/**
@@ -256,7 +259,9 @@ class Sejoli_Jne_Official {
 	 * @return    Sejoli_Jne_Official_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
+
 		return $this->loader;
+
 	}
 
 	/**
@@ -266,7 +271,9 @@ class Sejoli_Jne_Official {
 	 * @return    string    The version number of the plugin.
 	 */
 	public function get_version() {
+
 		return $this->version;
+
 	}
 
 	/**
@@ -277,8 +284,10 @@ class Sejoli_Jne_Official {
 	 * @param array $methods Registered shipping methods.
 	 */
 	public function register_sejoli_jne_method( $methods ) {
+
 	    $methods[ 'sejoli-jne-shipping' ] = new \Sejoli_Jne_Official\Shipping_Method();
 	    return $methods;
+
 	}
 
 }

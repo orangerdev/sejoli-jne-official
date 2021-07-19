@@ -205,48 +205,19 @@ class CODJNE {
                 )),
 
             Field::make( 'checkbox', 'shipment_cod_jne_active', __('Aktifkan COD JNE', 'sejoli-jne-official')),
-
-            // Field::make( 'text', 'shipment_cod_jne_title', __('Nama Kurir', 'sejoli-jne-official'))
-            //     ->set_required(true)
-            //     ->set_default_value('COD / Kurir Toko')
-            //     ->set_conditional_logic(array(
-            //         array(
-            //             'field'	=> 'shipment_cod_jne_active',
-            //             'value'	=> true
-            //         ),
-            //         array(
-            //             'field' => 'product_type',
-            //             'value' => 'physical'
-            //         )
-            //     )),
-
-            // Field::make( 'text', 'shipment_cod_jne_fee', __('Biaya', 'sejoli-jne-official'))
-            //     ->set_attribute('type', 'number')
-            //     ->set_default_value(0)
-            //     ->set_help_text( __('Kosongkan jika tidak ada biaya kurir. Dalam rupiah', 'sejoli-jne-official') )
-            //     ->set_conditional_logic(array(
-            //         array(
-            //             'field'	=> 'shipment_cod_jne_active',
-            //             'value'	=> true
-            //         ),
-            //         array(
-            //             'field' => 'product_type',
-            //             'value' => 'physical'
-            //         )
-            //     )),
             
             Field::make( "multiselect", "shipment_cod_jne_services", __('Layanan JNE', 'sejoli-jne-official') )
-                    ->add_options( array(
-                        'jne_service_reg' => 'REG',
-                        'jne_service_oke' => 'OKE',
-                        'jne_service_jtr' => 'JTR',
-                    )),
+                ->add_options( array(
+                    'cod_jne_service_reg' => 'REG',
+                    'cod_jne_service_oke' => 'OKE',
+                    'cod_jne_service_jtr' => 'JTR',
+                )),
 
             Field::make('text', 'shipment_cod_jne_weight', __('Berat barang (dalam gram)', 'sejoli-jne-official'))
-                    ->set_attribute('type', 'number')
-                    ->set_attribute('min', 100)
-                    ->set_required(true)
-                    ->set_conditional_logic(array(
+                ->set_attribute('type', 'number')
+                ->set_attribute('min', 100)
+                ->set_required(true)
+                ->set_conditional_logic(array(
                     array(
                         'field' => 'shipment_cod_jne_active',
                         'value' => true
@@ -254,7 +225,8 @@ class CODJNE {
                     array(
                         'field' => 'product_type',
                         'value' => 'physical'
-                    ))),
+                    )
+                )),
 
             Field::make('select', 'shipment_cod_jne_origin', __('Awal pengiriman', 'sejoli-jne-official'))
                 ->set_options(array($this, 'get_subdistrict_options'))
@@ -270,36 +242,6 @@ class CODJNE {
                     )))
                 ->set_help_text(__('Ketik nama kecamatan untuk pengiriman', 'sejoli-jne-official')),
 
-            // Field::make('checkbox', 'shipment_cod_jne_cover', __('Aktifkan jika COD hanya meliputi wilayah tertentu', 'sejoli-jne-official'))
-            //     ->set_conditional_logic(array(
-            //         array(
-            //             'field'	=> 'shipment_cod_jne_active',
-            //             'value'	=> true
-            //         ),
-            //         array(
-            //             'field' => 'product_type',
-            //             'value' => 'physical'
-            //         )
-            //     )),
-
-            // Field::make( 'multiselect', 'shipment_cod_jne_city', __('Nama kota yang mendukung COD', 'sejoli-jne-official'))
-            //     ->set_required(true)
-            //     ->set_options(array($this, 'get_city_options'))
-            //     ->set_help_text( __('Pilih kota yang mendukung COD. WAJIB DIISI', 'sejoli-jne-official'))
-            //     ->set_conditional_logic(array(
-            //         array(
-            //             'field'	=> 'shipment_cod_jne_active',
-            //             'value'	=> true
-            //         ),
-            //         array(
-            //             'field' => 'product_type',
-            //             'value' => 'physical'
-            //         ),
-            //         array(
-            //             'field'	=> 'shipment_cod_cover',
-            //             'value'	=> true
-            //         )
-            //     ))
         );
 
         $product_fields['shipping']['fields'] = array_merge( $product_fields['shipping']['fields'], $fields );
@@ -323,15 +265,15 @@ class CODJNE {
 
         foreach ( $jne_services as $jne_service ) {
 
-            if( $jne_service == 'jne_service_reg' ) {
+            if( $jne_service == 'cod_jne_service_reg' ) {
                 $services[] = 'REG19';
             }
 
-            if( $jne_service == 'jne_service_oke' ) {
+            if( $jne_service == 'cod_jne_service_oke' ) {
                 $services[] = 'OKE19';
             }
 
-            if( $jne_service == 'jne_service_jtr' ) {
+            if( $jne_service == 'cod_jne_service_jtr' ) {
                 $codes    = array( 'JTR18', 'JTR250', 'JTR<150', 'JTR>250' );
                 $services = array_merge( $services, $codes );
             }
@@ -417,24 +359,23 @@ class CODJNE {
             $cod_origin           = carbon_get_post_meta( $product_id, 'shipment_cod_jne_origin');
             $cod_origin_city      = $this->get_subdistrict_detail($cod_origin);
             $cod_destination_city = $this->get_subdistrict_detail($post_data['district_id']);
-            $is_cod_locally       = boolval(carbon_get_post_meta( $product_id, 'shipment_cod_jne_cover'));
+            $is_cod_locally       = boolval(carbon_get_post_meta($product_id, 'shipment_cod_jne_cover'));
             $add_options          = true;
             $fee_title            = '';
-
-            $get_origin      = JNE_Destination::where( 'city_name', $cod_origin_city['city'] )->first();
-            $get_destination = JNE_Destination::where( 'district_name', $cod_destination_city['subdistrict_name'] )->first();
-            
-            $product         = sejolisa_get_product($post_data['product_id']);
-            $product_weight  = intval($product->shipping['weight']);
-            $weight_cost     = (int) round((intval($post_data['quantity']) * $product_weight) / 1000);
-            $weight_cost     = (0 === $weight_cost) ? 1 : $weight_cost;
-
-            $tariff = $this->get_tariff_info( $get_origin, $get_destination, $weight_cost );
+            $get_origin           = JNE_Destination::where( 'city_name', $cod_origin_city['city'] )->first();
+            $get_destination      = JNE_Destination::where( 'district_name', $cod_destination_city['subdistrict_name'] )->first(); 
+            $product              = sejolisa_get_product($post_data['product_id']);
+            $product_weight       = intval($product->shipping['weight']);
+            $weight_cost          = (int) round((intval($post_data['quantity']) * $product_weight) / 1000);
+            $weight_cost          = (0 === $weight_cost) ? 1 : $weight_cost;
+            $tariff               = $this->get_tariff_info( $get_origin, $get_destination, $weight_cost );
 
             if(true === $is_cod_locally) :
+                
                 $city_cover  = carbon_get_post_meta( $product_id, 'shipment_cod_jne_city');
                 $district_id = intval($post_data['district_id']);
                 $add_options = $this->check_if_subdistrict_in_cities($district_id, $city_cover);
+            
             endif;
 
             if(true === $add_options) :
