@@ -394,17 +394,17 @@ class CODJNE {
 
                             if($rate->service_display == 'OKE'){
                                 $cod_title = 'JNE '.$rate->service_display. __(' (Ongkos Kirim Ekonomis)', 'sejoli-jne-official');
-                                $key_title = 'JNE '.$rate->service_display. __(' (Ongkos Kirim Ekonomis - estimasi 2-3 Hari)', 'sejoli-jne-official');
+                                $key_title = 'JNE '.$rate->service_display;
                                 $fee_title = ' - ' . sejolisa_price_format($price). ', (COD - estimasi 2-3 Hari)';
                             }
                             elseif($rate->service_display == 'REG'){
                                 $cod_title = 'JNE '.$rate->service_display. __(' (Layanan Reguler)', 'sejoli-jne-official');
-                                $key_title = 'JNE '.$rate->service_display. __(' (Layanan Reguler - estimasi 1-2 Hari)', 'sejoli-jne-official');
+                                $key_title = 'JNE '.$rate->service_display;
                                 $fee_title = ' - ' . sejolisa_price_format($price). ', (COD - estimasi 1-2 Hari)';
                             }
                             else{
                                 $cod_title = 'JNE '.$rate->service_display. __(' (Layanan Pengiriman Truk)', 'sejoli-jne-official');
-                                $key_title = 'JNE '.$rate->service_display. __(' (Layanan Pengiriman Truk - estimasi 3-4 Hari)', 'sejoli-jne-official');
+                                $key_title = 'JNE '.$rate->service_display;
                                 $fee_title = ' - ' . sejolisa_price_format($price). ', (COD - estimasi 3-4 Hari)';
                             }
                             
