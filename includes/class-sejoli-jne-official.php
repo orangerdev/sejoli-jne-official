@@ -78,6 +78,7 @@ class Sejoli_Jne_Official {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_json_hooks();
 
 	}
 
@@ -151,16 +152,23 @@ class Sejoli_Jne_Official {
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'api/class-sejoli-jne-official-jne.php';
 
 		/**
+		 * The class responsible for defining all actions that work for json functions
+		 */
+		require_once SEJOLI_JNE_OFFICIAL_DIR . '/json/main.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . '/json/order.php';
+
+		/**
 		 * The class responsible for defining CLI command and function
 		 * side of the site.
 		 */
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'cli/jne.php';
 
 		/**
-		 * The class responsible for defining all actions that occur in the admin area.
+		 * The class responsible for defining all actions that occur in the admin area
 		 */
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/class-sejoli-jne-official-admin.php';
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/shipment.php';
+		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/order.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -210,6 +218,14 @@ class Sejoli_Jne_Official {
 		$this->loader->add_filter( 'sejoli/admin/js-localize-data',		 	      $shipment, 'set_localize_js_var',	10);
 		$this->loader->add_action( 'carbon_fields_theme_options_container_saved', $shipment, 'delete_cache_data',	10);
 
+		// $order = new Sejoli_Jne_Official\Admin\Order( $this->get_plugin_name(), $this->get_version() );
+
+		// $this->loader->add_action( 'admin_init',					$order, 'register_cron_jobs',	 100);
+		// $this->loader->add_filter( 'sejoli/admin/js-localize-data',	$order, 'set_localize_js_cod_var',	 1);
+		// $this->loader->add_filter( 'sejoli/order/status',			$order, 'get_status', 			 9999);
+		// $this->loader->add_action( 'sejoli/order/update-status',	$order, 'process_pickup',		 999, 2);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-update',	$order, 'process_pickup_by_ajax', 999);
+
 	}
 
 	/**
@@ -225,6 +241,82 @@ class Sejoli_Jne_Official {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
+
+	}
+
+	/**
+	 * Register all of the hooks related to json request
+	 *
+	 * @since 	1.0.0
+	 * @access 	private
+	 */
+	private function define_json_hooks() {
+
+		// $access = new Sejoli_Jne_Official\JSON\Access();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-access-get-bonus', 			$access, 'get_bonus_content', 1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-access-list-by-product', 	$access, 'list_by_product', 1);
+
+		// $affiliate = new Sejoli_Jne_Official\JSON\Affiliate();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-get-bonus-content', 		$affiliate, 'get_bonus_content', 1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-update-bonus-content', 	$affiliate, 'update_bonus_content', 1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-get-facebook-pixel', 		$affiliate, 'get_facebook_pixel', 1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-update-facebook-pixel',	$affiliate, 'update_facebook_pixel', 1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-confirm-commission-transfer',		$affiliate, 'confirm_commission_transfer');
+		// $this->loader->add_action( 'wp_ajax_sejoli-pay-single-affiliate-commission',	$affiliate, 'confirm_single_commission_transfer');
+
+		// $commission = new Sejoli_Jne_Official\JSON\Commission();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-commission-table',				$commission, 'set_for_table',	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-commission-table',		$commission, 'set_for_affiliate_table',	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-commission-detail',	$commission, 'set_for_affiliate_commission_confirmation', 1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-commission-chart',				$commission, 'set_for_chart',	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-commission-confirm',				$commission, 'set_for_paid_confirmation',	1);
+
+		// $coupon = new Sejoli_Jne_Official\JSON\Coupon();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-create-coupon',	$coupon, 'create_affiliate_coupon', 	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-list-coupons',	$coupon, 'list_parent_coupons',			1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-coupon-table',	$coupon, 'set_for_table',				1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-coupon-check', 	$coupon, 'check_coupon_availability', 	999);
+		// $this->loader->add_action( 'wp_ajax_sejoli-coupon-update',	$coupon, 'update_coupons',				1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-coupon-delete',	$coupon, 'delete_coupons',				1);
+
+		$order = new Sejoli_Jne_Official\JSON\Order();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-order-table',		$order, 'set_for_affiliate_table', 	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-export-prepare',		$order, 'prepare_for_exporting', 	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-shipping',				$order, 'check_for_shipping', 		1);
+		$this->loader->add_action( 'wp_ajax_sejoli-order-pickup-generate-resi',	$order, 'generate_pickup_resi', 1);
+		$this->loader->add_action( 'wp_ajax_sejoli-order-pickup',				$order, 'process_pickup', 		1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-table',				$order, 'set_for_table',			1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-chart',				$order, 'set_for_chart',			1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-detail',				$order, 'get_detail',	    		1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-bulk-notification-order',	$order, 'check_order_for_bulk_notification', 1);
+		// $this->loader->add_action( 'sejoli_ajax_check-order-for-confirmation',	$order, 'get_order_confirmation',		1);
+
+		// $product  = new Sejoli_Jne_Official\JSON\Product();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-product-options',				$product, 'set_for_options',		1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-product-affiliate-link-list',	$product, 'list_affiliate_links', 	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-product-affiliate-help-list',	$product, 'list_affiliate_help', 	1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-product-table',					$product, 'set_for_table', 			1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-check-autoresponder',			$product, 'check_autoresponder',	1);
+
+		// $statistic = new Sejoli_Jne_Official\JSON\Statistic();
+
+		// $this->loader->add_action( 'wp_ajax_sejoli-statistic-commission',		$statistic, 'get_commission_data',				1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-statistic-product',			$statistic, 'get_product_data',					1);
+		// $this->loader->add_action( 'sejoli_ajax_get-member-statistic-today', 	$statistic, 'get_member_today_statistic', 		1);
+		// $this->loader->add_action( 'sejoli_ajax_get-member-statistic-yesterday',$statistic, 'get_member_yesterday_statistic', 	1);
+		// $this->loader->add_action( 'sejoli_ajax_get-member-statistic-monthly', 	$statistic, 'get_member_monthly_statistic', 1);
+		// $this->loader->add_action( 'sejoli_ajax_get-member-statistic-all', 		$statistic, 'get_member_all_statistic', 	1);
+		// $this->loader->add_action( 'sejoli_ajax_get-chart-statistic-monthly',	$statistic, 'get_chart_monthly_statistic', 	1);
+		// $this->loader->add_action( 'sejoli_ajax_get-chart-statistic-yearly',	$statistic, 'get_chart_yearly_statistic', 	1);
+		// $this->loader->add_action( 'sejoli_ajax_get-top-ten',					$statistic, 'get_top_ten_data', 			1);
+		// $this->loader->add_action( 'sejoli_ajax_get-acquisition-data',			$statistic, 'get_acquisition_data',			1);
+		// $this->loader->add_action( 'sejoli_ajax_get-acquisition-member-data',	$statistic, 'get_acquisition_member_data',	1);
 
 	}
 

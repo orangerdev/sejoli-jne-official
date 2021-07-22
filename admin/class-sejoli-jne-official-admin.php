@@ -99,6 +99,23 @@ class Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/sejoli-jne-official-admin.js', array( 'jquery' ), $this->version, false );
 
+		wp_localize_script( $this->plugin_name, 'sejoli_cod_jne', array(
+			'pickup' => array(
+				'ajaxurl'	=> add_query_arg(array(
+						'action' => 'sejoli-order-pickup'
+					), admin_url('admin-ajax.php')
+				),
+				'nonce'	=> wp_create_nonce('sejoli-order-pickup')
+			),
+			'pickup_generate_resi' => array(
+				'ajaxurl'	=> add_query_arg(array(
+						'action' => 'sejoli-order-pickup-generate-resi'
+					), admin_url('admin-ajax.php')
+				),
+				'nonce'	=> wp_create_nonce('sejoli-order-pickup-generate-resi')
+			)
+        ));
+
 	}
 
 }

@@ -245,7 +245,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 			self::$body 		= array_merge( self::$body, [
 				'OLSHOP_BRANCH'			 => 'CGK000',
 				'OLSHOP_CUST'			 => '10950700',
-				'OLSHOP_ORDERID'		 => '8987987',
+				'OLSHOP_ORDERID'		 => '875988', //$order_id,
 				'OLSHOP_SHIPPER_NAME'	 => $shipper_name,
 				'OLSHOP_SHIPPER_ADDR1'	 => $shipper_addr1,
 				'OLSHOP_SHIPPER_ADDR2'	 => $shipper_addr2,
