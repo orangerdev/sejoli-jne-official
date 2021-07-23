@@ -324,7 +324,6 @@ class JNE extends \Sejoli_Jne_Official\API {
 			self::$method 	= 'POST';
 
 			$get_response 	= self::do_request();
-			// print_r($get_response);
 
 			if ( ! is_wp_error( $get_response ) ) :
 

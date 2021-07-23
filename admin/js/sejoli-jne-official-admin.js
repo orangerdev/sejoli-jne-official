@@ -50,6 +50,7 @@
 	});
 
 	$(document).on('click', '.sejolisa-confirm-order-pickup', function(){
+
 		//Set params
     	let invoice_number = $('input[name="order_id"]').val();
     	let baseURL 	   = sejoli_cod_jne.pickup_generate_resi.ajaxurl;
@@ -82,6 +83,7 @@
                 console.log(error);
             }
         });
+
 	});
 
 })( jQuery );

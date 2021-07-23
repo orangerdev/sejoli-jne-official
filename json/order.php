@@ -191,4 +191,66 @@ Class Order extends \Sejoli_Jne_Official\JSON
 
     }
 
+    /**
+     * Create Updating Status Order to Completed Based on Shipment Status is Delivered Cron Job
+     *
+     * @since 1.0.0
+     */
+    public function sejoli_update_status_cron_schedules($schedules) {
+
+        $schedules['order_status_to_completed'] = array(
+            'interval' => 300, 
+            'display'  => 'Update Status Order to Completed Once every 5 minutes'
+        );
+        return $schedules;
+
+    }
+
+    /**
+     * Set Schedule Event for Updating Status Order to Complete Based on Shipping Status is Delivered Cron Job
+     *
+     * @since 1.0.0
+     */
+    public function schedule_update_order_to_complete_based_on_shipment_status() {
+
+        // Schedule an action if it's not already scheduled
+        if ( ! wp_next_scheduled( 'update_status_order_to_completed' ) ) {
+            wp_schedule_event( time(), 'order_status_to_completed', 'update_status_order_to_completed' );
+        }
+
+    }
+
+    /**
+     * Create Updating Status Order to Complete Based on Shipping Status is Delivered Functiona
+     *
+     * @since    1.0.0
+     */
+    public function update_status_order_to_completed_based_on_shipment_status() {
+
+        global $wpdb;
+        $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}sejolisa_orders WHERE status = 'shipping'");
+        
+        // Loop through each order post object
+        foreach( $results as $result ){
+
+            $order_id          = $result->ID; // The Order ID
+            $meta_data         = unserialize($result->meta_data);
+            $shipping_number   = $meta_data['shipping_data']['resi_number'];
+            $shipment_tracking = API_JNE::set_params()->get_tracking( $shipping_number );
+
+            if($shipment_tracking->cnote->pod_status == "DELIVERED"){
+
+                // Process updating order status
+                $status = "completed";
+                do_action('sejoli/order/update-status', [
+                    'ID'     => 37, // $order_id,
+                    'status' => $status
+                ]);
+
+            }
+
+        }
+
+    }
+
 }
