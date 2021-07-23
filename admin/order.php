@@ -148,29 +148,6 @@ class Order {
 			$new_status  = $args['status'];
 
 			if($prev_status === $new_status) :
-				sejolisa_set_respond([
-						'valid' => false,
-						'order' => $order,
-						'messages' => [
-							'error' => [
-								sprintf(__('Can\'t update since current order status and given status are same. The status is %s', 'sejoli'), $new_status)
-							]
-						]
-					],
-					'order'
-				);
-				return;
-			endif;
-
-			// We need this hook later to validate if we can allow moving status to another
-			// For example, we prevent moving order with status completed to on-hold
-			$allow_update_status = apply_filters('sejoli/order/allow-update-status',
-				true,
-				[
-					'prev_status' => $prev_status,
-					'new_status'  => $new_status
-				],
-				$order);
 
 			// is allowed
 			if(true === $allow_update_status) :

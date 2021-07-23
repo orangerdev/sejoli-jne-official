@@ -65,13 +65,18 @@
                 nonce:  nonce
             },
             success : function(response) {
-            	console.log("Pickup");
-                console.log(response);
-                alert('No. Resi: ' + response);
-				$('.sejolisa-confirm-order-pickup').hide();
-				$('.noresi').val(response);
-				$('.sejolisa-confirm-order-shipping').attr('style', 'display: inline-block !important');
-				// $('.sejolisa-confirm-order-shipping').trigger("click");
+                if(response != 'NULL') {
+                	alert('No. Resi: ' + response);
+					$('.sejolisa-confirm-order-pickup').hide();
+					$('.noresi').val(response);
+					$('.label-resi').show();
+					$('.no-resi').html(response);
+					$('.sejolisa-confirm-order-shipping').attr('style', 'display: none !important');
+					$('.sejolisa-confirm-order-shipping').trigger("click");
+                } else {
+                	alert('Gagal Mendapatkan No Resi!');
+                	window.location.reload();
+                }
             },
             error: function (request, status, error) {
                 console.log(error);

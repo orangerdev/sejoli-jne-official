@@ -168,7 +168,7 @@ class Sejoli_Jne_Official {
 		 */
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/class-sejoli-jne-official-admin.php';
 		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/shipment.php';
-		require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/order.php';
+		// require_once SEJOLI_JNE_OFFICIAL_DIR . 'admin/order.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -252,11 +252,6 @@ class Sejoli_Jne_Official {
 	 */
 	private function define_json_hooks() {
 
-		// $access = new Sejoli_Jne_Official\JSON\Access();
-
-		// $this->loader->add_action( 'wp_ajax_sejoli-access-get-bonus', 			$access, 'get_bonus_content', 1);
-		// $this->loader->add_action( 'wp_ajax_sejoli-access-list-by-product', 	$access, 'list_by_product', 1);
-
 		// $affiliate = new Sejoli_Jne_Official\JSON\Affiliate();
 
 		// $this->loader->add_action( 'wp_ajax_sejoli-affiliate-get-bonus-content', 		$affiliate, 'get_bonus_content', 1);
@@ -289,7 +284,7 @@ class Sejoli_Jne_Official {
 		// $this->loader->add_action( 'wp_ajax_sejoli-order-export-prepare',		$order, 'prepare_for_exporting', 	1);
 		// $this->loader->add_action( 'wp_ajax_sejoli-order-shipping',				$order, 'check_for_shipping', 		1);
 		$this->loader->add_action( 'wp_ajax_sejoli-order-pickup-generate-resi',	$order, 'generate_pickup_resi', 1);
-		$this->loader->add_action( 'wp_ajax_sejoli-order-pickup',				$order, 'process_pickup', 		1);
+		// $this->loader->add_action( 'wp_ajax_sejoli-order-pickup',				$order, 'process_pickup', 		1);
 		// $this->loader->add_action( 'wp_ajax_sejoli-order-table',				$order, 'set_for_table',			1);
 		// $this->loader->add_action( 'wp_ajax_sejoli-order-chart',				$order, 'set_for_chart',			1);
 		// $this->loader->add_action( 'wp_ajax_sejoli-order-detail',				$order, 'get_detail',	    		1);
