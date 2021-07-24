@@ -66,7 +66,12 @@
                 nonce:  nonce
             },
             success : function(response) {
-                if(response != 'NULL') {
+            	console.log("RESI");
+            	console.log(response);
+                if(response == null) {
+                	alert('Gagal Mendapatkan No Resi!');
+                	window.location.reload();
+                } else {
                 	alert('No. Resi: ' + response);
 					$('.sejolisa-confirm-order-pickup').hide();
 					$('.noresi').val(response);
@@ -74,9 +79,6 @@
 					$('.no-resi').html(response);
 					$('.sejolisa-confirm-order-shipping').attr('style', 'display: none !important');
 					$('.sejolisa-confirm-order-shipping').trigger("click");
-                } else {
-                	alert('Gagal Mendapatkan No Resi!');
-                	window.location.reload();
                 }
             },
             error: function (request, status, error) {

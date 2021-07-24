@@ -135,10 +135,10 @@ Class Order extends \Sejoli_Jne_Official\JSON
             $shipper_origin_id         = $data['product']->cod['cod-origin'];
             $shipper_origin_city       = $this->get_subdistrict_detail($shipper_origin_id);
             $shipper_origin            = JNE_Destination::where( 'district_name', $shipper_origin_city['subdistrict_name'] )->first(); 
-            $shipper_name              = get_bloginfo('name');
+            $shipper_name              = carbon_get_theme_option( 'sejoli_store_name' );
             $shipper_address           = $data['meta_data']['shipping_data']['address'];
             $shipper_zip               = '0000';
-            $shipper_phone             = '000000000000';
+            $shipper_phone             = carbon_get_theme_option( 'sejoli_store_phone' );
             $params['shipperName']     = $shipper_name;
             $params['shipperAddr1']    = $shipper_origin_city['subdistrict_name'];
             $params['shipperAddr2']    = $shipper_origin_city['subdistrict_name'];
@@ -163,6 +163,8 @@ Class Order extends \Sejoli_Jne_Official\JSON
  
         endif;
 
+        error_log(print_r($params, true));
+
         $respond = [
             'valid'   => false,
             'message' => NULL
@@ -177,6 +179,7 @@ Class Order extends \Sejoli_Jne_Official\JSON
             if ( ! is_wp_error( $do_update ) ) {
 
                 $respond['valid']  = true;
+                $number_resi = $do_update[0]->cnote_no;
 
             } else {
 
@@ -185,8 +188,6 @@ Class Order extends \Sejoli_Jne_Official\JSON
 
         endif;
         
-        $number_resi = $do_update[0]->cnote_no;
-
         echo wp_send_json( $number_resi );
 
     }
