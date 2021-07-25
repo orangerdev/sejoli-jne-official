@@ -244,7 +244,7 @@ Class Order extends \Sejoli_Jne_Official\JSON
                 // Process updating order status
                 $status = "completed";
                 do_action('sejoli/order/update-status', [
-                    'ID'     => 37, // $order_id,
+                    'ID'     => $order_id,
                     'status' => $status
                 ]);
 

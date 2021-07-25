@@ -319,8 +319,8 @@ class JNE extends \Sejoli_Jne_Official\API {
 	public function get_tracking(string $tracking_number) {
 	
 		try {
-			// self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/'.$tracking_number;
-			self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/4808012000000159';
+			self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/'.$tracking_number;
+			// self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/4808012000000159';
 			self::$method 	= 'POST';
 
 			$get_response 	= self::do_request();
