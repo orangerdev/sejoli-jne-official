@@ -163,8 +163,6 @@ Class Order extends \Sejoli_Jne_Official\JSON
  
         endif;
 
-        error_log(print_r($params, true));
-
         $respond = [
             'valid'   => false,
             'message' => NULL
