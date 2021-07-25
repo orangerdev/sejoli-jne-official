@@ -211,6 +211,16 @@ class CODJNE {
                     'cod_jne_service_reg' => 'REG',
                     'cod_jne_service_oke' => 'OKE',
                     'cod_jne_service_jtr' => 'JTR',
+                ))
+                ->set_conditional_logic(array(
+                    array(
+                        'field' => 'shipment_cod_jne_active',
+                        'value' => true
+                    ),
+                    array(
+                        'field' => 'product_type',
+                        'value' => 'physical'
+                    )
                 )),
 
             Field::make('text', 'shipment_cod_jne_weight', __('Berat barang (dalam gram)', 'sejoli-jne-official'))
