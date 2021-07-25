@@ -93,8 +93,8 @@ Class Order extends \Sejoli_Jne_Official\JSON
             'goodsValue'     => 1000,
             'goodsType'      => 1,
             'insurance'      => "N",
-            'origin'         => "CGK10000",
-            'destination'    => "BDO10000",
+            'origin'         => NULL,
+            'destination'    => NULL,
             'service'        => NULL,
             'codflag'        => "YES",
             'codAmount'      => NULL,
@@ -156,8 +156,8 @@ Class Order extends \Sejoli_Jne_Official\JSON
             $params['qty']             = $qty;
             $params['weight']          = $weight_cost;
             $params['goodsDesc']       = $product_name;
-            // $params['origin']          = $shipper_origin->code;
-            // $params['destination']     = $receiver_destination->code;
+            $params['origin']          = $shipper_origin->code;
+            $params['destination']     = $receiver_destination->code;
             $params['service']         = $shipping_service;
             $params['codAmount']       = $shipping_cost;
  
