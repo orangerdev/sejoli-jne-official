@@ -135,10 +135,10 @@ Class Order extends \Sejoli_Jne_Official\JSON
             $shipper_origin_id         = $data['product']->cod['cod-origin'];
             $shipper_origin_city       = $this->get_subdistrict_detail($shipper_origin_id);
             $shipper_origin            = JNE_Destination::where( 'district_name', $shipper_origin_city['subdistrict_name'] )->first(); 
-            $shipper_name              = carbon_get_theme_option( 'sejoli_store_name' );
+            $shipper_name              = carbon_get_post_meta($product_id, 'sejoli_store_name');
             $shipper_address           = $data['meta_data']['shipping_data']['address'];
             $shipper_zip               = '0000';
-            $shipper_phone             = carbon_get_theme_option( 'sejoli_store_phone' );
+            $shipper_phone             = carbon_get_post_meta($product_id, 'sejoli_store_phone');
             $params['shipperName']     = $shipper_name;
             $params['shipperAddr1']    = $shipper_origin_city['subdistrict_name'];
             $params['shipperAddr2']    = $shipper_origin_city['subdistrict_name'];

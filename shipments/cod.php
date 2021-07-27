@@ -205,6 +205,36 @@ class CODJNE {
                 )),
 
             Field::make( 'checkbox', 'shipment_cod_jne_active', __('Aktifkan COD JNE', 'sejoli-jne-official')),
+
+            Field::make('separator', 'sep_sejoli_store_setting',    __('Pengaturan Toko', 'sejoli-jne-official')),
+
+                Field::make('text', 'sejoli_store_name', __('Nama Toko', 'sejoli-jne-official'))
+                    ->set_required(true)
+                    ->set_default_value(get_bloginfo('name'))
+                    ->set_conditional_logic(array(
+                        array(
+                            'field' => 'shipment_cod_jne_active',
+                            'value' => true
+                        ),
+                        array(
+                            'field' => 'product_type',
+                            'value' => 'physical'
+                        )
+                    )),
+
+                Field::make('text', 'sejoli_store_phone', __('No. Telepon Toko', 'sejoli-jne-official'))
+                    ->set_attribute('type', 'number')
+                    ->set_required(true)
+                    ->set_conditional_logic(array(
+                        array(
+                            'field' => 'shipment_cod_jne_active',
+                            'value' => true
+                        ),
+                        array(
+                            'field' => 'product_type',
+                            'value' => 'physical'
+                        )
+                    )),
             
             Field::make( "multiselect", "shipment_cod_jne_services", __('Layanan JNE', 'sejoli-jne-official') )
                 ->add_options( array(
