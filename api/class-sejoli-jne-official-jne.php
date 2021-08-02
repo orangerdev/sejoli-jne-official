@@ -30,8 +30,8 @@ class JNE extends \Sejoli_Jne_Official\API {
      */
 	public static function set_sandbox_data() {
 
-		$username 	= 'TESTAPI';
-		$api_key 	= '25c898a9faea1a100859ecd9ef674548';
+		$username 	= 'APITEST';
+		$api_key 	= '28c894a9fleala200867ecd9ef674536';
 
 		self::$body = array(
 			'username' => $username,
@@ -245,7 +245,7 @@ class JNE extends \Sejoli_Jne_Official\API {
 			self::$body 		= array_merge( self::$body, [
 				'OLSHOP_BRANCH'			 => 'CGK000',
 				'OLSHOP_CUST'			 => '10950700',
-				'OLSHOP_ORDERID'		 => $order_id,
+				'OLSHOP_ORDERID'		 => '723924', //$order_id,
 				'OLSHOP_SHIPPER_NAME'	 => $shipper_name,
 				'OLSHOP_SHIPPER_ADDR1'	 => $shipper_addr1,
 				'OLSHOP_SHIPPER_ADDR2'	 => $shipper_addr2,
@@ -319,8 +319,8 @@ class JNE extends \Sejoli_Jne_Official\API {
 	public function get_tracking(string $tracking_number) {
 	
 		try {
-			self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/'.$tracking_number;
-			// self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/4808012000000159';
+			// self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/'.$tracking_number;
+			self::$endpoint = 'http://apiv2.jne.co.id:10102/tracing/api/list/cnoteretails/cnote/4808012000000159';
 			self::$method 	= 'POST';
 
 			$get_response 	= self::do_request();

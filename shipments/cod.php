@@ -8,18 +8,174 @@ use \WeDevs\ORM\Eloquent\Facades\DB;
 use Sejoli_Jne_Official\Model\JNE\Destination as JNE_Destination;
 use Sejoli_Jne_Official\Model\JNE\Tariff as JNE_Tariff;
 use Sejoli_Jne_Official\API\JNE as API_JNE;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class CODJNE {
+    /**
+     * Table name
+     * @since 1.0.0
+     * @var string
+     */
+    protected $table = 'sejoli_jne_cod_transaction';
+
+    /**
+     * Unique code
+     * @since 1.0.0
+     * @var float
+     */
+    protected $unique_code = 0.0;
+
+    /**
+     * Order price
+     * @since 1.0.0
+     * @var float
+     */
+    protected $order_price = 0.0;
 
     /**
      * Construction
      * @since   1.2.0
      */
     public function __construct() {
+        global $wpdb;
 
-        add_filter( 'sejoli/product/fields',    array($this, 'set_product_shipping_fields'), 35);
+        $this->id          = 'cod';
+        $this->table       = $wpdb->prefix . $this->table;
+
+        $this->define_hooks();
+    }
+
+    /**
+     * Register all of the hooks related to cod request
+     *
+     * @since   1.0.0
+     * @access  private
+     */
+    public function define_hooks(){
+
+        // Shipment Method
         add_filter( 'sejoli/shipment/options',  array($this, 'set_shipping_options'),        10, 2);
+        add_filter( 'sejoli/product/fields',    array($this, 'set_product_shipping_fields'), 36);
         add_action( 'sejoli/product/meta-data', array($this, 'setup_product_cod_meta'),      10, 2);
+
+        // Payment Method
+        add_action('admin_init',       [$this, 'register_transaction_table'], 1);
+        add_filter('sejoli/payment/payment-options', [$this, 'add_payment_options'] );
+
+    }
+
+    /**
+     * Register transaction table
+     * @return void
+     */
+    public function register_transaction_table() {
+        
+        global $wpdb;
+
+        if(!Capsule::schema()->hasTable( $this->table )):
+            Capsule::schema()->create( $this->table, function($table){
+                $table->increments('ID');
+                $table->datetime('created_at');
+                $table->datetime('updated_at')->default('0000-00-00 00:00:00');
+                $table->integer('order_id');
+                $table->integer('user_id')->nullable();
+                $table->float('total', 12, 2);
+                $table->integer('unique_code');
+                $table->text('meta_data');
+            });
+        endif;
+
+    }
+
+    /**
+     * Add payment options if cod transfer active
+     * Hooked via filter sejoli/payment/payment-options
+     * @since   1.0.0
+     * @param   array $options
+     * @return  array
+     */
+    public function add_payment_options($options = array()) {
+
+        $url        = $_SERVER['HTTP_REFERER'];
+        $product_id = url_to_postid( $url );
+        $active     = carbon_get_post_meta($product_id, 'shipment_cod_jne_active');
+
+        if(true === $active) :
+
+            $cod_name  = __('Cash on Delivery', 'sejoli-jne-official');
+            $cod_image = SEJOLI_JNE_OFFICIAL_URL . 'public/img/cod.png';
+
+            $key = 'cod:::CashOnDelivery';
+            $cod_name = 
+            $options[$key] = [
+                'label' => $cod_name,
+                'image' => $cod_image
+            ];
+
+        endif;
+
+        return $options;
+
+    }
+
+    /**
+     * Display payment instruction in notification
+     * @param  array    $invoice_data
+     * @param  string   $recipient_type
+     * @param  string   $media
+     * @return string
+     */
+    public function display_payment_instruction($invoice_data, $media = 'email') {
+
+        if('on-hold' !== $invoice_data['order_data']['status']) :
+            return;
+        endif;
+
+        $content = sejoli_get_notification_content(
+                    'cod',
+                    $media,
+                    array(
+                        'order' => $invoice_data['order_data']
+                    )
+                );
+
+        return $content;
+
+    }
+
+    /**
+     * Display simple payment instruction in notification
+     * @param  array    $invoice_data
+     * @param  string   $recipient_type
+     * @param  string   $media
+     * @return string
+     */
+    public function display_simple_payment_instruction($invoice_data, $media = 'email') {
+
+        if('on-hold' !== $invoice_data['order_data']['status']) :
+            return;
+        endif;
+
+        $content = __('via Cash on Delivery', 'sejoli');
+
+        return $content;
+
+    }
+
+
+    /**
+     * Set payment info to order datas
+     * @since 1.0.0
+     * @param array $order_data
+     * @return array
+     */
+    public function set_payment_info(array $order_data) {
+
+        $trans_data = [
+            'bank'  => 'COD - Cash on Delivery'
+        ];
+
+        return $trans_data;
 
     }
 
@@ -50,6 +206,7 @@ class CODJNE {
         endif;
 
         return $is_in_cities;
+
     }
 
     /**
@@ -184,30 +341,28 @@ class CODJNE {
     /**
      * Add COD shipping product fields
      * @since   1.2.0
-     * @param   array   $product_fields     Current product fields
+     * @param   array   $fields     Current product fields
      * @return  array
      */
-    public function set_product_shipping_fields($product_fields) {
+    public function set_product_shipping_fields($fields) {
+        $fields[]   = array(
+            'title'     => __('COD - JNE Official', 'sejolilp'),
+            'fields'    => array(
+                Field::make( 'separator', 'sep_cod_jne' , __('Cash on Delivery (COD JNE)', 'sejoli'))
+                    ->set_classes('sejoli-with-help')
+                    ->set_help_text('<a href="' . sejolisa_get_admin_help('shipping') . '" class="thickbox sejoli-help">Tutorial <span class="dashicons dashicons-video-alt2"></span></a>'),
 
-        $fields = array(
+                Field::make('checkbox', 'shipment_cod_jne_active', __('Aktifkan COD JNE', 'sejoli-jne-official'))
+                    ->set_option_value('yes')
+                    ->set_default_value(true),
 
-            Field::make('separator', 'sep_sejoli_shipment_code_jne', __('Cash on Delivery (COD JNE)', 'sejoli-jne-official'))
-                ->set_classes('sejoli-with-help')
-                ->set_help_text('<a href="' . sejolisa_get_admin_help('affiliate-link') . '" class="thickbox sejoli-help">Tutorial <span class="dashicons dashicons-video-alt2"></span></a>')
-                ->set_conditional_logic(array(
+                Field::make('separator', 'sep_cod_jne_store_setting',    __('Pengaturan Toko', 'sejoli-jne-official'))->set_conditional_logic(array(
                     array(
-                        'field' => 'product_type',
-                        'value' => 'physical'
-                    ), array(
-                        'field' => 'shipment_active',
+                        'field' => 'shipment_cod_jne_active',
                         'value' => true
                     )
                 )),
-
-            Field::make( 'checkbox', 'shipment_cod_jne_active', __('Aktifkan COD JNE', 'sejoli-jne-official')),
-
-            Field::make('separator', 'sep_sejoli_store_setting',    __('Pengaturan Toko', 'sejoli-jne-official')),
-
+                
                 Field::make('text', 'sejoli_store_name', __('Nama Toko', 'sejoli-jne-official'))
                     ->set_required(true)
                     ->set_default_value(get_bloginfo('name'))
@@ -215,10 +370,6 @@ class CODJNE {
                         array(
                             'field' => 'shipment_cod_jne_active',
                             'value' => true
-                        ),
-                        array(
-                            'field' => 'product_type',
-                            'value' => 'physical'
                         )
                     )),
 
@@ -229,64 +380,53 @@ class CODJNE {
                         array(
                             'field' => 'shipment_cod_jne_active',
                             'value' => true
-                        ),
-                        array(
-                            'field' => 'product_type',
-                            'value' => 'physical'
                         )
                     )),
-            
-            Field::make( "multiselect", "shipment_cod_jne_services", __('Layanan JNE', 'sejoli-jne-official') )
-                ->add_options( array(
-                    'cod_jne_service_reg' => 'REG',
-                    'cod_jne_service_oke' => 'OKE',
-                    'cod_jne_service_jtr' => 'JTR',
-                ))
-                ->set_conditional_logic(array(
+                
+                Field::make('separator', 'sep_cod_jne_setting',    __('Pengaturan Layanan COD JNE', 'sejoli-jne-official'))->set_conditional_logic(array(
                     array(
                         'field' => 'shipment_cod_jne_active',
                         'value' => true
-                    ),
-                    array(
-                        'field' => 'product_type',
-                        'value' => 'physical'
                     )
                 )),
 
-            Field::make('text', 'shipment_cod_jne_weight', __('Berat barang (dalam gram)', 'sejoli-jne-official'))
-                ->set_attribute('type', 'number')
-                ->set_attribute('min', 100)
-                ->set_required(true)
-                ->set_conditional_logic(array(
-                    array(
-                        'field' => 'shipment_cod_jne_active',
-                        'value' => true
-                    ),
-                    array(
-                        'field' => 'product_type',
-                        'value' => 'physical'
-                    )
-                )),
+                Field::make( "multiselect", "shipment_cod_jne_services", __('Layanan JNE', 'sejoli-jne-official') )
+                    ->add_options( array(
+                        'cod_jne_service_reg' => 'REG',
+                        'cod_jne_service_oke' => 'OKE',
+                        'cod_jne_service_jtr' => 'JTR',
+                    ))
+                    ->set_conditional_logic(array(
+                        array(
+                            'field' => 'shipment_cod_jne_active',
+                            'value' => true
+                        )
+                    )),
 
-            Field::make('select', 'shipment_cod_jne_origin', __('Awal pengiriman', 'sejoli-jne-official'))
-                ->set_options(array($this, 'get_subdistrict_options'))
-                ->set_required(true)
-                ->set_conditional_logic(array(
-                    array(
-                        'field' => 'shipment_cod_jne_active',
-                        'value' => true
-                    ),
-                    array(
-                        'field' => 'product_type',
-                        'value' => 'physical'
-                    )))
-                ->set_help_text(__('Ketik nama kecamatan untuk pengiriman', 'sejoli-jne-official')),
+                Field::make('text', 'shipment_cod_jne_weight', __('Berat barang (dalam gram)', 'sejoli-jne-official'))
+                    ->set_attribute('type', 'number')
+                    ->set_attribute('min', 1000)
+                    ->set_required(true)
+                    ->set_conditional_logic(array(
+                        array(
+                            'field' => 'shipment_cod_jne_active',
+                            'value' => true
+                        )
+                    )),
 
+                Field::make('select', 'shipment_cod_jne_origin', __('Awal pengiriman', 'sejoli-jne-official'))
+                    ->set_options(array($this, 'get_subdistrict_options'))
+                    ->set_required(true)
+                    ->set_conditional_logic(array(
+                        array(
+                            'field' => 'shipment_cod_jne_active',
+                            'value' => true
+                        )))
+                    ->set_help_text(__('Ketik nama kecamatan untuk pengiriman', 'sejoli-jne-official')),
+            )
         );
 
-        $product_fields['shipping']['fields'] = array_merge( $product_fields['shipping']['fields'], $fields );
-
-        return $product_fields;
+        return $fields;
 
     }
 

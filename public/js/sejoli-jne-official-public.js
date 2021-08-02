@@ -29,4 +29,25 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	$(document).ready(function($){
+	    
+	    $('body').on( 'change', 'select#shipping_method', function(e){
+	        e.preventDefault();
+
+	        $('input[value="cod:::CashOnDelivery"]').closest('.eight').removeClass('hide');
+	        $('input[value="cod:::CashOnDelivery"]').prop('checked', true);
+
+	        var s = $(this).val();
+	        if (s.match(/COD.*/)) {
+	            $('input[value="cod:::CashOnDelivery"]').closest('.eight').removeClass('hide');
+	            $('input[value="cod:::CashOnDelivery"]').prop('checked', true);
+	        } else {
+	            $('input[value="cod:::CashOnDelivery"]').closest('.eight').addClass('hide');
+	            $('input[value="cod:::CashOnDelivery"]').prop('checked', false);
+	            $('.eight:nth-child(2) .ui input[name="payment_gateway"]').prop('checked', true);
+	        }
+	    });
+
+    });
+    
 })( jQuery );
